@@ -12,9 +12,10 @@ function Header() {
       </div>
       <nav className="headerRight">
       <a href="/home">Home</a>
-        <a href="#courses">Courses</a>
+        <a href="/courses">Courses</a>
         <a href="#approvals">Approvals</a>
         <a href="#reports">Reports</a>
+        <a href="faculty-page">Add course</a>
         <a href="/logout">Logout</a>
       </nav>
     </header>

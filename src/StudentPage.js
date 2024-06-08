@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './StudentPage.css'; // Corrected the import path
 
 function StudentPage() {
   const [openElectives, setOpenElectives] = useState([]);
@@ -29,39 +30,42 @@ function StudentPage() {
 
   const handleSubmit = async () => {
     // Ensure total-students is treated as 0 if undefined
-    const currentTotalStudents = selectedCourse['total-students'] ?? 0;
+    const currentTotalStudents = selectedCourse ? selectedCourse['total-students'] ?? 0 : 0; // Added null check
   
     if (selectedCourse && currentTotalStudents < 60) {
-      const response = await fetch(`/api/courses/${selectedCourse.courseCode}/increment-total-students`, {
-        method: 'POST',
-      });
+      try {
+        const response = await fetch(`/api/courses/${selectedCourse.courseCode}/increment-total-students`, {
+          method: 'POST',
+        });
   
-      if (response.ok) {
-        const updatedCourse = {
-          ...selectedCourse,
-          'total-students': currentTotalStudents + 1
-        };
-        setOpenElectives(openElectives.map(course =>
-          course._id === selectedCourse._id ? updatedCourse : course
-        ));
-        setSelectedCourse(updatedCourse);
-  
-        const currentTime = new Date().toLocaleString();
-        setSuccessMessage(`Successfully selected: ${selectedCourse.open_elective} at ${currentTime}`);
-      } else {
-        const errorData = await response.json();
-        setSuccessMessage(errorData.message || 'Failed to increment total students.');
+        if (response.ok) {
+          const updatedCourse = {
+            ...selectedCourse,
+            'total-students': currentTotalStudents + 1
+          };
+          setOpenElectives(openElectives.map(course =>
+            course._id === selectedCourse._id ? updatedCourse : course
+          ));
+          setSelectedCourse(updatedCourse);
+    
+          const currentTime = new Date().toLocaleString();
+          setSuccessMessage(`Successfully selected: ${selectedCourse.open_elective} at ${currentTime}`);
+        } else {
+          const errorData = await response.json();
+          setSuccessMessage(errorData.message || 'Failed to increment total students.');
+        }
+      } catch (error) {
+        console.error('Submit error:', error);
       }
     } else {
       setSuccessMessage('Please select a course first or course is full.');
     }
   };
-  
 
   return (
-    <div className="open-electives-container">
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Open Electives</h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <div className="student-page-container">
+      <h2 className="page-heading">Open Electives</h2>
+      <table className="electives-table">
         <thead>
           <tr>
             <th>Open Elective</th>
@@ -71,50 +75,39 @@ function StudentPage() {
             <th>Select</th>
           </tr>
         </thead>
-        <tbody>
-  {openElectives.map(elective => (
-    <tr key={elective._id}>
-      <td style={{ padding: '10px', border: '1px solid #ddd' }}>{elective.open_elective}</td>
-      <td style={{ padding: '10px', border: '1px solid #ddd' }}>{elective.courseCode}</td>
-      <td style={{ padding: '10px', border: '1px solid #ddd' }}>{elective.department}</td>
-      <td style={{ padding: '10px', border: '1px solid #ddd' }}>{elective.faculty}</td>
-      {elective['total-students'] >= 60 ? (
-        <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center', color: 'red' }}>
-          Seats Filled
-        </td>
-      ) : (
-        <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center' }}>
-          <input
-            type="radio"
-            name="selectedElective"
-            onClick={() => handleSelectCourse(elective)}
-          />
-        </td>
-      )}
-    </tr>
-  ))}
-</tbody>
-
+        <tbody className='tbody'>
+          {openElectives.map(elective => (
+            <tr key={elective._id}>
+              <td>{elective.open_elective}</td>
+              <td>{elective.courseCode}</td>
+              <td>{elective.department}</td>
+              <td>{elective.faculty}</td>
+              <td>
+                {elective['total-students'] >= 60 ? (
+                  <span className="seats-filled">Seats Filled</span>
+                ) : (
+                  <input
+                    type="radio"
+                    name="selectedElective"
+                    onClick={() => handleSelectCourse(elective)}
+                  />
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+      <div className="submit-button-container">
         <button 
           onClick={handleSubmit} 
-          disabled={!selectedCourse || selectedCourse['total-students'] >= 60} 
-          style={{
-            padding: '10px 20px',
-            fontSize: '16px',
-            backgroundColor: selectedCourse && selectedCourse['total-students'] >= 60 ? 'gray' : 'blue',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer'
-          }}
+          disabled={!selectedCourse || (selectedCourse['total-students'] && selectedCourse['total-students'] >= 60)} // Corrected the condition
+          className={selectedCourse && selectedCourse['total-students'] >= 60 ? 'disabled-button' : 'active-button'}
         >
           Submit
         </button>
       </div>
       {successMessage && (
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <div className="success-message">
           <p>{successMessage}</p>
         </div>
       )}

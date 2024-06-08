@@ -13,6 +13,7 @@ import StudentPage from './StudentPage';
 import CourseList from './CourseList';
 import HomePage from './HomePage';
 import LogoutPage from './LogoutPage';
+
 function AppWrapper() {
   return (
     <Router>
@@ -69,6 +70,7 @@ function App() {
             />
           </main>
         } />
+         <Route path="/courses" element={<StudentPage/>} />
         <Route path="/student-page" element={<StudentPage />} />
         <Route path="/faculty-page" element={<FacultyPage />} />
         {/* Define route for HomePage */}
