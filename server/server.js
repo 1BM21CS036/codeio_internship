@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 
 // MongoDB connection string
-const uri = "mongodb+srv://samhithacs20:mJVwbRopy9BgLuGr@cluster0.yyqir99.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://admin:admin@cluster0.oti0pdz.mongodb.net/?retryWrites=true&w=majority";
 
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
