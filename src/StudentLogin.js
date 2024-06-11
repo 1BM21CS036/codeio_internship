@@ -21,6 +21,7 @@ function StudentLogin() {
             });
             const data = await response.json();
             if (data.success) {
+                window.localStorage.setItem("testLoggedin",true);
                 navigate('/student-page');
             } else {
                 setSuccessMessage("Wrong credentials");

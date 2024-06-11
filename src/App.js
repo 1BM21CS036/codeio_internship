@@ -13,6 +13,7 @@ import StudentPage from './StudentPage';
 import CourseList from './CourseList';
 import HomePage from './HomePage';
 import LogoutPage from './LogoutPage';
+const loggedIn = window.localStorage.getItem("testLoggedin");
 
 function AppWrapper() {
   return (
@@ -70,7 +71,7 @@ function App() {
             />
           </main>
         } />
-         <Route path="/courses" element={<StudentPage/>} />
+         <Route path="/courses" element={loggedIn?<StudentPage/>:<StudentLogin></StudentLogin>} />
         <Route path="/student-page" element={<StudentPage />} />
         <Route path="/faculty-page" element={<FacultyPage />} />
         {/* Define route for HomePage */}

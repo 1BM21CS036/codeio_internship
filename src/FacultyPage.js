@@ -12,7 +12,7 @@ function RegistrationForm() {
 
   // Faculty based on department
   const facultyOptions = {
-    "Computer Science": ["Syed Akram", "Namratha M", "Selva Kumar"],
+    "Computer Science": ["Syed Akram", "Namratha M", "Selva Kumar","Sonika Sharma D","Umadevi"],
     "Electrical Engineering": ["Chandasree Das", "Padmavathi K", "R S Geetha"],
     "Mechanical Engineering": ["Ram Rohit V", "Bheemsha", "Sharana Basavaraja"]
   };
